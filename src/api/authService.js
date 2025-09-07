@@ -26,19 +26,32 @@ export default authService;
 
 async function login(email, password) {
 	try {
+		// First, ensure we have the organization ID
+		const { organizationService } = await import('./organizationService');
+		const organizationId = await organizationService.fetchOrganizationId();
+
+		if (!organizationId) {
+			throw new Error('Unable to determine organization');
+		}
+
 		const response = await axios.post(`${API_URL}/public/login`, {
 			email,
 			password
+		}, {
+			headers: {
+				'X-Organization-ID': organizationId.toString()
+			}
 		});
 
 		const { success, token, user_role, user_full_name, user_id, message } = response.data;
 
 		if (success && token) {
-			// Store auth data
+			// Store auth data AND organization ID
 			localStorage.setItem(AUTH_TOKEN_KEY, token);
 			localStorage.setItem(USER_ROLE_KEY, user_role || '');
 			localStorage.setItem(USER_FULLNAME_KEY, user_full_name || '');
 			localStorage.setItem(USER_ID_KEY, user_id?.toString() || '');
+			localStorage.setItem(ORGANIZATION_ID_KEY, organizationId.toString()); // Store org ID
 
 			return {
 				success: true,
@@ -54,7 +67,7 @@ async function login(email, password) {
 		console.error('Login error:', error);
 		return {
 			success: false,
-			message: error.response?.data?.message || 'Error during login'
+			message: error.response?.data?.message || error.message || 'Error during login'
 		};
 	}
 }
@@ -85,14 +98,26 @@ async function logout() {
 
 async function register(registerData) {
 	try {
+		// Ensure we have organization ID for registration
+		const { organizationService } = await import('./organizationService');
+		const organizationId = await organizationService.fetchOrganizationId();
+
+		if (!organizationId) {
+			throw new Error('Unable to determine organization');
+		}
+
 		// Use consistent endpoint pattern
-		const response = await axios.post(`${API_URL}/public/register`, registerData);
+		const response = await axios.post(`${API_URL}/public/register`, registerData, {
+			headers: {
+				'X-Organization-ID': organizationId.toString()
+			}
+		});
 		return response.data;
 	} catch (error) {
 		console.error('Registration error:', error);
 		return {
 			success: false,
-			message: error.response?.data?.message || 'Error during registration'
+			message: error.response?.data?.message || error.message || 'Error during registration'
 		};
 	}
 }
