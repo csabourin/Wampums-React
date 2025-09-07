@@ -30,11 +30,12 @@ export async function getParticipants(filters = {}) {
 		if (filters.search) params.search = filters.search;
 
 		const response = await fetchFromApi('participants', 'GET');
+		console.log(response);
 
-		if (response.success && response.participants) {
+		if (response.success && response.data) {
 			// Cache the results for 5 minutes
-			await indexedDBService.setCachedData(cacheKey, response.participants, 5 * 60 * 1000);
-			return response;
+			await indexedDBService.setCachedData(cacheKey, response.data, 5 * 60 * 1000);
+			return response.data;
 		}
 
 		throw new Error(response.message || 'Failed to fetch participants');

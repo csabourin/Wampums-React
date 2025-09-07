@@ -28,8 +28,9 @@ const Dashboard = () => {
 			try {
 				// Fetch participants data
 				const participantsResponse = await participantService.getParticipants();
-				if (participantsResponse.success && Array.isArray(participantsResponse.participants)) {
-					setParticipants(participantsResponse.participants);
+				console.log("Participants in dashboard: ",participantsResponse);
+				if (participantsResponse.success && Array.isArray(participantsResponse.data)) {
+					setParticipants(participantsResponse.data);
 				}
 
 				// Organize participants into groups
@@ -78,7 +79,7 @@ const Dashboard = () => {
 		};
 
 		fetchData();
-	}, [t]);
+	}, []);
 
 	const handleLogout = async () => {
 		try {

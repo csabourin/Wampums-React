@@ -25,10 +25,11 @@ export async function getGroups() {
 	try {
 		const response = await fetchFromApi('get_groups', 'GET');
 
-		if (response.success && response.groups) {
+		if (response.success && response.data) {
 			// Sort groups alphabetically by name
-			const sortedGroups = response.groups.sort((a, b) => a.name.localeCompare(b.name));
-			
+			const sortedGroups = response.data.sort((a, b) => a.name.localeCompare(b.name));
+			console.log("Fetched groups: ", sortedGroups);
+
 			// Cache for 10 minutes
 			await indexedDBService.setCachedData(cacheKey, sortedGroups, 10 * 60 * 1000);
 			debugLog('Groups fetched successfully');
