@@ -524,7 +524,7 @@ export async function syncOfflineParticipantData() {
 	}
 }
 
-export default {
+export const participantService = {
 	getParticipants,
 	fetchParticipantsForParent,
 	getParticipant,
@@ -541,3 +541,5 @@ export default {
 	getParticipantsByGroup,
 	syncOfflineParticipantData
 };
+
+export default participantService;

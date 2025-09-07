@@ -26,17 +26,23 @@ async function fetchOrganizationId() {
 		return parseInt(storedId, 10);
 	}
 
+	// For development, use a fallback organization ID
+	if (window.location.hostname === 'localhost' || window.location.hostname.includes('localhost')) {
+		console.log("Development mode: using fallback organization ID");
+		const fallbackId = 1;
+		localStorage.setItem(ORGANIZATION_ID_KEY, fallbackId.toString());
+		return fallbackId;
+	}
+
 	// If not found in localStorage, fetch from the server
 	try {
 		console.log("Fetching organization ID from the server...");
 
 		// Get the current hostname
-		// const hostname = window.location.hostname;
-		const hostname = "https://meute6a.app";
-		// Removed hardcoded organizationId and malformed hostname
-
+		const hostname = window.location.hostname;
+		
 		const response = await fetch(
-			`${API_BASE_URL}/get_organization_id?hostname=${encodeURIComponent(hostname)}`
+			`${API_BASE_URL}/public/get_organization_id?hostname=${encodeURIComponent(hostname)}`
 		);
 
 		if (!response.ok) {
@@ -58,6 +64,13 @@ async function fetchOrganizationId() {
 		}
 	} catch (error) {
 		console.error("Error fetching organization ID:", error);
+		// For development, fallback to organization ID 1
+		if (window.location.hostname === 'localhost' || window.location.hostname.includes('localhost')) {
+			console.log("Using fallback organization ID due to error");
+			const fallbackId = 1;
+			localStorage.setItem(ORGANIZATION_ID_KEY, fallbackId.toString());
+			return fallbackId;
+		}
 		throw error;
 	}
 }

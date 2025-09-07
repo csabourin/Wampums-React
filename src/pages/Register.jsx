@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import LoadingSpinner from '../components/common/LoadingSpinner/LoadingSpinner';
 import Notification from '../components/common/Notification/Notification';
 import LanguageToggle from '../components/common/LanguageToggle/LanguageToggle';
-import './Register.css';
+import './Login.css';
 
 const Register = () => {
 	const { t } = useTranslation();

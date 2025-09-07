@@ -81,6 +81,80 @@ export function getApiUrl(action, additionalParams = {}) {
 	return url.toString();
 }
 
+// Debug functions
+export function debugLog(...args) {
+	if (DEBUG_MODE) {
+		console.log(...args);
+	}
+}
+
+export function debugError(...args) {
+	if (DEBUG_MODE) {
+		console.error(...args);
+	}
+}
+
+// Auth header helper
+export function getAuthHeader() {
+	return authService.getAuthHeaders();
+}
+
+// Fetch from API helper
+export async function fetchFromApi(action, method = 'GET', data = null, params = {}) {
+	try {
+		const url = getApiUrl(action, params);
+		const config = {
+			method,
+			headers: authService.getAuthHeaders()
+		};
+		
+		if (data && ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase())) {
+			config.data = data;
+		}
+		
+		const response = await apiClient.request(config.method === 'GET' ? {
+			url,
+			method: 'GET',
+			headers: config.headers
+		} : {
+			url,
+			method: config.method,
+			headers: config.headers,
+			data: config.data
+		});
+		
+		return response.data;
+	} catch (error) {
+		if (!navigator.onLine) {
+			error.isOffline = true;
+		}
+		throw error;
+	}
+}
+
+// Upload to API helper
+export async function uploadToApi(action, formData, progressCallback = null) {
+	try {
+		const url = getApiUrl(action);
+		const response = await apiClient.post(url, formData, {
+			headers: {
+				...authService.getAuthHeaders(),
+				'Content-Type': 'multipart/form-data'
+			},
+			onUploadProgress: progressCallback ? (progressEvent) => {
+				const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+				progressCallback(percentCompleted);
+			} : undefined
+		});
+		return response.data;
+	} catch (error) {
+		if (!navigator.onLine) {
+			error.isOffline = true;
+		}
+		throw error;
+	}
+}
+
 // General API functions
 export const apiService = {
 	get: async (action, params = {}) => {
