@@ -1,0 +1,354 @@
+/* ManagePoints Component Styles */
+
+.manage-points-page {
+	padding: 1rem;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding-bottom: 120px; /* Space for fixed controls */
+}
+
+.page-header {
+	margin-bottom: 1rem;
+}
+
+.back-link {
+	color: var(--primary-color);
+	text-decoration: none;
+	font-size: 0.9rem;
+	margin-bottom: 0.5rem;
+	display: inline-block;
+}
+
+.back-link:hover {
+	text-decoration: underline;
+}
+
+.page-header h1 {
+	margin: 0.5rem 0;
+	color: var(--text-primary);
+}
+
+/* Controls Section */
+.controls {
+	background: var(--background-secondary);
+	border-radius: 8px;
+	padding: 1rem;
+	margin-bottom: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.sort-options {
+	display: flex;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+}
+
+.sort-options button {
+	background: var(--primary-color);
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.9rem;
+	transition: background-color 0.2s;
+}
+
+.sort-options button:hover {
+	background: var(--primary-hover);
+}
+
+.sort-options button.active {
+	background: var(--accent-color);
+}
+
+.filter-options {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.filter-options label {
+	font-weight: 500;
+	color: var(--text-primary);
+}
+
+.filter-options select {
+	padding: 0.4rem 0.8rem;
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	background: white;
+	color: var(--text-primary);
+}
+
+/* Points Content */
+.points-content {
+	margin-bottom: 2rem;
+}
+
+/* Group Styles */
+.groups-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.group-section {
+	background: var(--background-secondary);
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.group-section.unassigned {
+	border: 2px dashed var(--border-color);
+}
+
+.group-header {
+	background: var(--primary-color);
+	color: white;
+	padding: 1rem;
+	cursor: pointer;
+	display: flex;
+	justify-content: between;
+	align-items: center;
+	transition: background-color 0.2s;
+}
+
+.group-header:hover {
+	background: var(--primary-hover);
+}
+
+.group-header.selected {
+	background: var(--accent-color);
+	box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.3);
+}
+
+.group-name {
+	font-weight: bold;
+	font-size: 1.1rem;
+}
+
+.group-total {
+	font-size: 1rem;
+	font-weight: 500;
+}
+
+.group-content {
+	padding: 0.5rem 0;
+}
+
+/* Participant Styles */
+.participants-list {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.participant-row {
+	display: flex;
+	justify-content: between;
+	align-items: center;
+	padding: 0.75rem 1rem;
+	background: var(--background-secondary);
+	border-radius: 4px;
+	cursor: pointer;
+	transition: all 0.2s;
+	border: 2px solid transparent;
+}
+
+.participant-row:hover {
+	background: var(--background-hover);
+}
+
+.participant-row.selected {
+	background: var(--selection-background);
+	border-color: var(--accent-color);
+	box-shadow: 0 0 0 1px rgba(var(--accent-color-rgb), 0.3);
+}
+
+.participant-row.group-member {
+	margin: 0 1rem;
+	border-radius: 0;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.participant-row.group-member:last-child {
+	border-bottom: none;
+	border-radius: 0 0 4px 4px;
+}
+
+.participant-row.group-member:first-child {
+	border-radius: 4px 4px 0 0;
+}
+
+.participant-name {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-weight: 500;
+	color: var(--text-primary);
+}
+
+.participant-points {
+	font-weight: bold;
+	color: var(--primary-color);
+}
+
+/* Badge Styles */
+.badge {
+	background: var(--accent-color);
+	color: white;
+	padding: 0.2rem 0.5rem;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.badge.leader {
+	background: var(--success-color);
+}
+
+.badge.second-leader {
+	background: var(--warning-color);
+}
+
+/* Fixed Points Controls */
+.points-controls {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: var(--background-secondary);
+	border-top: 2px solid var(--border-color);
+	padding: 1rem;
+	box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+	z-index: 100;
+}
+
+.points-buttons {
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+	margin-bottom: 0.5rem;
+}
+
+.point-btn {
+	background: var(--primary-color);
+	color: white;
+	border: none;
+	padding: 0.75rem 1rem;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 1rem;
+	font-weight: bold;
+	transition: all 0.2s;
+	min-width: 60px;
+}
+
+.point-btn:hover:not(:disabled) {
+	background: var(--primary-hover);
+	transform: translateY(-1px);
+}
+
+.point-btn.add {
+	background: var(--success-color);
+}
+
+.point-btn.add:hover:not(:disabled) {
+	background: var(--success-hover);
+}
+
+.point-btn.remove {
+	background: var(--error-color);
+}
+
+.point-btn.remove:hover:not(:disabled) {
+	background: var(--error-hover);
+}
+
+.point-btn:disabled {
+	background: var(--disabled-color);
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.selected-info {
+	text-align: center;
+	margin-top: 0.5rem;
+}
+
+.selected-info p {
+	margin: 0;
+	font-size: 0.9rem;
+	color: var(--text-secondary);
+	font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.manage-points-page {
+		padding: 0.5rem;
+		padding-bottom: 140px;
+	}
+	
+	.controls {
+		padding: 0.75rem;
+	}
+	
+	.sort-options {
+		justify-content: center;
+	}
+	
+	.sort-options button {
+		padding: 0.4rem 0.8rem;
+		font-size: 0.8rem;
+	}
+	
+	.filter-options {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+	}
+	
+	.group-header {
+		padding: 0.75rem;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+	}
+	
+	.participant-row {
+		padding: 0.6rem 0.75rem;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+	}
+	
+	.points-buttons {
+		gap: 0.25rem;
+	}
+	
+	.point-btn {
+		padding: 0.6rem 0.8rem;
+		font-size: 0.9rem;
+		min-width: 50px;
+	}
+}
+
+@media (max-width: 480px) {
+	.points-buttons {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 0.5rem;
+	}
+	
+	.participant-name {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+	}
+}

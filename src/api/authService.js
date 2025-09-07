@@ -1,5 +1,6 @@
 // src/api/authService.js
 import axios from 'axios';
+import { publicApiService } from './apiService';
 
 const API_URL = import.meta.env.REACT_APP_API_URL || 'https://wampums-api.replit.app';
 const AUTH_TOKEN_KEY = 'jwtToken';
@@ -39,7 +40,7 @@ async function login(email, password) {
 			password
 		}, {
 			headers: {
-				'X-Organization-ID': organizationId.toString()
+				'x-organization-id': organizationId.toString()
 			}
 		});
 
@@ -125,8 +126,8 @@ async function register(registerData) {
 async function resetPassword(token, newPassword) {
 	try {
 		// Use consistent endpoint pattern
-		const response = await axios.post(`${API_URL}/public/reset-password`, {
-			token,
+		const response = await axios.post(`${API_URL}/public/reset_password`, {
+			reset_token: token,
 			new_password: newPassword
 		});
 		return response.data;
@@ -142,7 +143,7 @@ async function resetPassword(token, newPassword) {
 async function requestPasswordReset(email) {
 	try {
 		// Use consistent endpoint pattern
-		const response = await axios.post(`${API_URL}/public/request-password-reset`, {
+		const response = await axios.post(`${API_URL}/public/request_reset`, {
 			email
 		});
 		return response.data;

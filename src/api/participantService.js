@@ -29,7 +29,7 @@ export async function getParticipants(filters = {}) {
 		if (filters.active !== undefined) params.active = filters.active;
 		if (filters.search) params.search = filters.search;
 
-		const response = await fetchFromApi('get_participants', 'GET', null, params);
+		const response = await fetchFromApi('participants', 'GET');
 
 		if (response.success && response.participants) {
 			// Cache the results for 5 minutes

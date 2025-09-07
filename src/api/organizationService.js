@@ -1,5 +1,5 @@
 // src/api/organizationService.js
-import apiService from "./apiService";
+import { publicApiService } from "./apiService";
 import indexedDBService from "../lib/indexedDBService";
 
 const ORGANIZATION_ID_KEY = "currentOrganizationId";
@@ -96,7 +96,7 @@ async function getOrganizationSettings() {
 			`${API_BASE_URL}/public/organization-settings`,
 			{
 				headers: {
-					"X-Organization-ID": organizationId.toString(), // Convert to string
+					"x-organization-id": organizationId.toString(), // Convert to string
 				},
 			},
 		);
@@ -146,7 +146,7 @@ async function getOrganizationFormFormats(organizationId = null) {
 			headers: {
 				Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
 				"Content-Type": "application/json",
-				"X-Organization-ID": (organizationId || getCurrentOrganizationId()).toString(),
+				"x-organization-id": (organizationId || getCurrentOrganizationId()).toString(),
 			},
 		});
 

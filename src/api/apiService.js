@@ -2,8 +2,8 @@
 import axios from 'axios';
 import { authService } from './authService';
 
-const API_URL = import.meta.env.REACT_APP_API_URL || '';
-const DEBUG_MODE = import.meta.env.REACT_APP_DEBUG_MODE === 'true';
+const API_URL = import.meta.env.REACT_APP_API_URL || 'https://wampums-api.replit.app';
+const DEBUG_MODE = import.meta.env.REACT_APP_DEBUG_MODE === 'true' || import.meta.env.DEV;
 
 // Create axios instance
 const apiClient = axios.create({
@@ -48,37 +48,41 @@ apiClient.interceptors.response.use(
 	error => {
 		if (DEBUG_MODE) {
 			console.error('API Response Error:', error);
+			if (error.response) {
+				console.error('Response status:', error.response.status);
+				console.error('Response data:', error.response.data);
+				console.error('Response headers:', error.response.headers);
+			}
 		}
 
 		// Handle authentication errors
-		if (error.response && error.response.status === 401) {
-			// Session expired or invalid token
-			localStorage.removeItem('jwtToken');
-			window.location.href = '/login';
+		if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+			console.error('Authentication/Authorization error:', error.response.status, error.response.data);
+			if (error.response.status === 401) {
+				// Session expired or invalid token
+				localStorage.removeItem('jwtToken');
+				window.location.href = '/login';
+			}
 		}
 
 		return Promise.reject(error);
 	}
 );
 
-// Helper function to construct API URLs
-export function getApiUrl(action, additionalParams = {}) {
-	const url = new URL(`/api.php`, API_URL);
-	url.searchParams.append('action', action);
-
-	const organizationId = authService.getOrganizationId();
-	if (organizationId) {
-		url.searchParams.append('organization_id', organizationId);
+// Helper function to construct API URLs for public endpoints
+export function getPublicApiUrl(endpoint) {
+	if (!API_URL) {
+		throw new Error('API_URL is not configured. Please set REACT_APP_API_URL environment variable.');
 	}
+	return `${API_URL}/public/${endpoint}`;
+}
 
-	// Add additional params
-	Object.entries(additionalParams).forEach(([key, value]) => {
-		if (value !== undefined && value !== null) {
-			url.searchParams.append(key, value);
-		}
-	});
-
-	return url.toString();
+// Helper function to construct API URLs for authenticated endpoints
+export function getApiUrl(endpoint) {
+	if (!API_URL) {
+		throw new Error('API_URL is not configured. Please set REACT_APP_API_URL environment variable.');
+	}
+	return `${API_URL}/api/${endpoint}`;
 }
 
 // Debug functions
@@ -99,10 +103,10 @@ export function getAuthHeader() {
 	return authService.getAuthHeaders();
 }
 
-// Fetch from API helper
-export async function fetchFromApi(action, method = 'GET', data = null, params = {}) {
+// Fetch from API helper for authenticated endpoints
+export async function fetchFromApi(endpoint, method = 'GET', data = null) {
 	try {
-		const url = getApiUrl(action, params);
+		const url = getApiUrl(endpoint);
 		const config = {
 			method,
 			headers: authService.getAuthHeaders()
@@ -132,10 +136,50 @@ export async function fetchFromApi(action, method = 'GET', data = null, params =
 	}
 }
 
-// Upload to API helper
-export async function uploadToApi(action, formData, progressCallback = null) {
+// Fetch from public API helper (no authentication)
+export async function fetchFromPublicApi(endpoint, method = 'GET', data = null) {
 	try {
-		const url = getApiUrl(action);
+		const url = getPublicApiUrl(endpoint);
+		const config = {
+			method,
+			headers: { 'Content-Type': 'application/json' }
+		};
+
+		// Add organization ID to headers if available
+		try {
+			const organizationId = authService.getOrganizationId();
+			if (organizationId) {
+				config.headers['x-organization-id'] = organizationId;
+			}
+		} catch (error) {
+			// AuthService might not be initialized yet, skip organization ID
+			debugLog('AuthService not ready, skipping organization ID');
+		}
+		
+		if (data && ['POST', 'PUT', 'PATCH'].includes(method.toUpperCase())) {
+			config.data = data;
+		}
+		
+		const response = await apiClient.request({
+			url,
+			method: config.method,
+			headers: config.headers,
+			...(config.data && { data: config.data })
+		});
+		
+		return response.data;
+	} catch (error) {
+		if (!navigator.onLine) {
+			error.isOffline = true;
+		}
+		throw error;
+	}
+}
+
+// Upload to API helper
+export async function uploadToApi(endpoint, formData, progressCallback = null) {
+	try {
+		const url = getApiUrl(endpoint);
 		const response = await apiClient.post(url, formData, {
 			headers: {
 				...authService.getAuthHeaders(),
@@ -157,46 +201,59 @@ export async function uploadToApi(action, formData, progressCallback = null) {
 
 // General API functions
 export const apiService = {
-	get: async (action, params = {}) => {
+	get: async (endpoint) => {
 		try {
-			const url = getApiUrl(action, params);
-			const response = await apiClient.get(url);
-			return response.data;
+			return await fetchFromApi(endpoint, 'GET');
 		} catch (error) {
-			console.error(`Error fetching ${action}:`, error);
+			console.error(`Error fetching ${endpoint}:`, error);
 			throw error;
 		}
 	},
 
-	post: async (action, data = {}, params = {}) => {
+	post: async (endpoint, data = {}) => {
 		try {
-			const url = getApiUrl(action, params);
-			const response = await apiClient.post(url, data);
-			return response.data;
+			return await fetchFromApi(endpoint, 'POST', data);
 		} catch (error) {
-			console.error(`Error posting to ${action}:`, error);
+			console.error(`Error posting to ${endpoint}:`, error);
 			throw error;
 		}
 	},
 
-	put: async (action, data = {}, params = {}) => {
+	put: async (endpoint, data = {}) => {
 		try {
-			const url = getApiUrl(action, params);
-			const response = await apiClient.put(url, data);
-			return response.data;
+			return await fetchFromApi(endpoint, 'PUT', data);
 		} catch (error) {
-			console.error(`Error putting to ${action}:`, error);
+			console.error(`Error putting to ${endpoint}:`, error);
 			throw error;
 		}
 	},
 
-	delete: async (action, params = {}) => {
+	delete: async (endpoint) => {
 		try {
-			const url = getApiUrl(action, params);
-			const response = await apiClient.delete(url);
-			return response.data;
+			return await fetchFromApi(endpoint, 'DELETE');
 		} catch (error) {
-			console.error(`Error deleting from ${action}:`, error);
+			console.error(`Error deleting from ${endpoint}:`, error);
+			throw error;
+		}
+	}
+};
+
+// Public API functions (no authentication required)
+export const publicApiService = {
+	get: async (endpoint) => {
+		try {
+			return await fetchFromPublicApi(endpoint, 'GET');
+		} catch (error) {
+			console.error(`Error fetching public ${endpoint}:`, error);
+			throw error;
+		}
+	},
+
+	post: async (endpoint, data = {}) => {
+		try {
+			return await fetchFromPublicApi(endpoint, 'POST', data);
+		} catch (error) {
+			console.error(`Error posting to public ${endpoint}:`, error);
 			throw error;
 		}
 	}

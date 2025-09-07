@@ -1,0 +1,401 @@
+/* FormInscription Component Styles */
+
+.form-inscription-page {
+	padding: 1rem;
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+.page-header {
+	margin-bottom: 2rem;
+}
+
+.back-link {
+	color: var(--primary-color);
+	text-decoration: none;
+	font-size: 0.9rem;
+	margin-bottom: 0.5rem;
+	display: inline-block;
+}
+
+.back-link:hover {
+	text-decoration: underline;
+}
+
+.page-header h1 {
+	margin: 0.5rem 0;
+	color: var(--text-primary);
+}
+
+/* Form Styles */
+.inscription-form {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.form-section {
+	background: var(--background-secondary);
+	border-radius: 8px;
+	padding: 1.5rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-section h2 {
+	margin-top: 0;
+	margin-bottom: 1.5rem;
+	color: var(--text-primary);
+	border-bottom: 2px solid var(--border-color);
+	padding-bottom: 0.5rem;
+}
+
+.form-section h3 {
+	margin: 1.5rem 0 1rem 0;
+	color: var(--text-primary);
+	font-size: 1.1rem;
+}
+
+/* Form Layout */
+.form-row {
+	display: flex;
+	gap: 1rem;
+	margin-bottom: 1rem;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	gap: 0.4rem;
+}
+
+.form-group.full-width {
+	flex: 1 1 100%;
+}
+
+.form-group label {
+	font-weight: 500;
+	color: var(--text-primary);
+	font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+	padding: 0.75rem;
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	font-size: 1rem;
+	transition: border-color 0.2s;
+	background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+	outline: none;
+	border-color: var(--primary-color);
+	box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.form-group textarea {
+	resize: vertical;
+	min-height: 80px;
+}
+
+/* Required field indicator */
+.form-group label:after {
+	content: '';
+}
+
+.form-group:has(input[required]) label:after,
+.form-group:has(select[required]) label:after,
+.form-group:has(textarea[required]) label:after {
+	content: ' *';
+	color: var(--error-color);
+}
+
+/* Guardian Section */
+.guardian-section {
+	border: 2px dashed var(--border-color);
+	position: relative;
+}
+
+.guardian-section:first-of-type {
+	border-color: var(--primary-color);
+	background: linear-gradient(135deg, var(--background-secondary) 0%, rgba(var(--primary-color-rgb), 0.05) 100%);
+}
+
+.guardians-container {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.section-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+}
+
+.section-header h2,
+.section-header h3 {
+	margin: 0;
+}
+
+/* Buttons */
+.add-guardian-btn,
+.remove-guardian-btn {
+	background: var(--primary-color);
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.9rem;
+	font-weight: 500;
+	transition: all 0.2s;
+}
+
+.add-guardian-btn:hover {
+	background: var(--primary-hover);
+	transform: translateY(-1px);
+}
+
+.remove-guardian-btn {
+	background: var(--error-color);
+	padding: 0.4rem 0.8rem;
+	font-size: 0.8rem;
+}
+
+.remove-guardian-btn:hover {
+	background: var(--error-hover);
+	transform: translateY(-1px);
+}
+
+/* Checkbox styling */
+.form-group label:has(input[type="checkbox"]) {
+	flex-direction: row;
+	align-items: center;
+	gap: 0.5rem;
+	font-weight: 400;
+	cursor: pointer;
+}
+
+.form-group input[type="checkbox"] {
+	width: auto;
+	transform: scale(1.2);
+	cursor: pointer;
+}
+
+/* Form Actions */
+.form-actions {
+	display: flex;
+	justify-content: center;
+	padding: 2rem 0;
+}
+
+.submit-btn {
+	background: var(--success-color);
+	color: white;
+	border: none;
+	padding: 1rem 3rem;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 1.1rem;
+	font-weight: 600;
+	transition: all 0.2s;
+	min-width: 200px;
+}
+
+.submit-btn:hover:not(:disabled) {
+	background: var(--success-hover);
+	transform: translateY(-1px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.submit-btn:disabled {
+	background: var(--disabled-color);
+	cursor: not-allowed;
+	opacity: 0.7;
+}
+
+.submit-btn:disabled:hover {
+	transform: none;
+	box-shadow: none;
+}
+
+/* Validation States */
+.form-group input:invalid:not(:placeholder-shown),
+.form-group select:invalid:not(:placeholder-shown),
+.form-group textarea:invalid:not(:placeholder-shown) {
+	border-color: var(--error-color);
+	background-color: rgba(var(--error-color-rgb), 0.05);
+}
+
+.form-group input:valid:not(:placeholder-shown),
+.form-group select:valid:not(:placeholder-shown),
+.form-group textarea:valid:not(:placeholder-shown) {
+	border-color: var(--success-color);
+}
+
+/* Error states */
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
+	border-color: var(--error-color);
+	background-color: rgba(var(--error-color-rgb), 0.05);
+}
+
+.form-group.error label {
+	color: var(--error-color);
+}
+
+/* Loading state */
+.inscription-form.loading {
+	opacity: 0.7;
+	pointer-events: none;
+}
+
+.submit-btn.loading {
+	position: relative;
+}
+
+.submit-btn.loading:after {
+	content: '';
+	position: absolute;
+	width: 16px;
+	height: 16px;
+	margin: auto;
+	border: 2px solid transparent;
+	border-top-color: currentColor;
+	border-radius: 50%;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.form-inscription-page {
+		padding: 0.5rem;
+	}
+	
+	.form-section {
+		padding: 1rem;
+	}
+	
+	.form-row {
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+	
+	.section-header {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 1rem;
+	}
+	
+	.section-header h2,
+	.section-header h3 {
+		margin-bottom: 0;
+	}
+	
+	.add-guardian-btn,
+	.remove-guardian-btn {
+		width: 100%;
+	}
+	
+	.submit-btn {
+		width: 100%;
+		padding: 1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.form-group input,
+	.form-group select,
+	.form-group textarea {
+		padding: 0.6rem;
+		font-size: 0.9rem;
+	}
+	
+	.form-section h2 {
+		font-size: 1.2rem;
+	}
+	
+	.form-section h3 {
+		font-size: 1rem;
+	}
+	
+	.page-header h1 {
+		font-size: 1.5rem;
+	}
+}
+
+/* Print styles */
+@media print {
+	.form-inscription-page {
+		max-width: none;
+		margin: 0;
+		padding: 0;
+	}
+	
+	.back-link,
+	.add-guardian-btn,
+	.remove-guardian-btn,
+	.form-actions {
+		display: none;
+	}
+	
+	.form-section {
+		background: white;
+		box-shadow: none;
+		page-break-inside: avoid;
+	}
+	
+	.guardian-section {
+		border: 1px solid #ccc;
+	}
+}
+
+/* Accessibility improvements */
+.form-group:focus-within label {
+	color: var(--primary-color);
+	font-weight: 600;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+	.form-group input,
+	.form-group select,
+	.form-group textarea {
+		border-width: 2px;
+	}
+	
+	.form-group input:focus,
+	.form-group select:focus,
+	.form-group textarea:focus {
+		border-width: 3px;
+	}
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+	.form-group input,
+	.form-group select,
+	.form-group textarea,
+	.add-guardian-btn,
+	.remove-guardian-btn,
+	.submit-btn {
+		transition: none;
+	}
+	
+	.submit-btn:hover:not(:disabled) {
+		transform: none;
+	}
+}

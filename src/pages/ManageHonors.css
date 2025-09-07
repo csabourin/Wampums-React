@@ -1,0 +1,376 @@
+/* ManageHonors Component Styles */
+
+.manage-honors-page {
+	padding: 1rem;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding-bottom: 100px; /* Space for fixed controls */
+}
+
+.page-header {
+	margin-bottom: 1rem;
+}
+
+.back-link {
+	color: var(--primary-color);
+	text-decoration: none;
+	font-size: 0.9rem;
+	margin-bottom: 0.5rem;
+	display: inline-block;
+}
+
+.back-link:hover {
+	text-decoration: underline;
+}
+
+.page-header h1 {
+	margin: 0.5rem 0;
+	color: var(--text-primary);
+}
+
+/* Controls Section */
+.controls {
+	background: var(--background-secondary);
+	border-radius: 8px;
+	padding: 1rem;
+	margin-bottom: 1rem;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 1rem;
+}
+
+.date-control {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.date-control label {
+	font-weight: 500;
+	color: var(--text-primary);
+}
+
+.date-control select {
+	padding: 0.4rem 0.8rem;
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	background: white;
+	color: var(--text-primary);
+	min-width: 150px;
+}
+
+.selection-info {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.selected-count {
+	background: var(--accent-color);
+	color: white;
+	padding: 0.3rem 0.6rem;
+	border-radius: 15px;
+	font-size: 0.9rem;
+	font-weight: 500;
+}
+
+/* Content */
+.honors-content {
+	margin-bottom: 2rem;
+}
+
+.no-data {
+	text-align: center;
+	padding: 2rem;
+	background: var(--background-secondary);
+	border-radius: 8px;
+	color: var(--text-secondary);
+}
+
+.no-data p {
+	margin: 0;
+	font-size: 1.1rem;
+}
+
+/* Groups List */
+.groups-list {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+.group-section {
+	background: var(--background-secondary);
+	border-radius: 8px;
+	overflow: hidden;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.group-header {
+	background: var(--primary-color);
+	color: white;
+	padding: 1rem;
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	transition: background-color 0.2s;
+}
+
+.group-header:hover {
+	background: var(--primary-hover);
+}
+
+.group-header.selected {
+	background: var(--accent-color);
+	box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.3);
+}
+
+.group-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+}
+
+.group-name {
+	font-weight: bold;
+	font-size: 1.1rem;
+}
+
+.group-stats {
+	font-size: 0.9rem;
+	opacity: 0.9;
+}
+
+.group-header input[type="checkbox"] {
+	transform: scale(1.2);
+	cursor: pointer;
+}
+
+.group-content {
+	padding: 0;
+}
+
+/* Participant Styles */
+.participant-row {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0.75rem 1rem;
+	border-bottom: 1px solid var(--border-color);
+	cursor: pointer;
+	transition: all 0.2s;
+	background: white;
+}
+
+.participant-row:last-child {
+	border-bottom: none;
+}
+
+.participant-row:hover {
+	background: var(--background-hover);
+}
+
+.participant-row.selected {
+	background: var(--selection-background);
+	border-left: 4px solid var(--accent-color);
+}
+
+.participant-row.already-honored {
+	opacity: 0.7;
+	background: var(--disabled-background);
+	cursor: not-allowed;
+}
+
+.participant-row.already-honored:hover {
+	background: var(--disabled-background);
+}
+
+.participant-info {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
+}
+
+.participant-name {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-weight: 500;
+	color: var(--text-primary);
+}
+
+.participant-stats {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	font-size: 0.9rem;
+}
+
+.total-honors {
+	color: var(--text-secondary);
+}
+
+.honored-today {
+	background: var(--success-color);
+	color: white;
+	padding: 0.2rem 0.5rem;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.participant-row input[type="checkbox"] {
+	transform: scale(1.2);
+	cursor: pointer;
+}
+
+.participant-row.already-honored input[type="checkbox"] {
+	display: none;
+}
+
+/* Badge Styles */
+.badge {
+	background: var(--accent-color);
+	color: white;
+	padding: 0.2rem 0.5rem;
+	border-radius: 12px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.badge.leader {
+	background: var(--success-color);
+}
+
+.badge.second-leader {
+	background: var(--warning-color);
+}
+
+/* Fixed Bottom Controls */
+.fixed-bottom {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: var(--background-secondary);
+	border-top: 2px solid var(--border-color);
+	padding: 1rem;
+	box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+	z-index: 100;
+}
+
+.award-honors-btn {
+	width: 100%;
+	background: var(--success-color);
+	color: white;
+	border: none;
+	padding: 1rem 2rem;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 1.1rem;
+	font-weight: bold;
+	transition: all 0.2s;
+}
+
+.award-honors-btn:hover {
+	background: var(--success-hover);
+	transform: translateY(-1px);
+}
+
+.award-honors-btn:active {
+	transform: translateY(0);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.manage-honors-page {
+		padding: 0.5rem;
+		padding-bottom: 120px;
+	}
+	
+	.controls {
+		padding: 0.75rem;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.75rem;
+	}
+	
+	.date-control {
+		width: 100%;
+		justify-content: space-between;
+	}
+	
+	.date-control select {
+		min-width: 120px;
+	}
+	
+	.group-header {
+		padding: 0.75rem;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.5rem;
+	}
+	
+	.group-info {
+		width: 100%;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: center;
+	}
+	
+	.participant-row {
+		padding: 0.6rem 0.75rem;
+	}
+	
+	.participant-info {
+		gap: 0.25rem;
+	}
+	
+	.participant-stats {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.participant-name {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+	}
+	
+	.group-info {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 0.25rem;
+	}
+	
+	.controls {
+		padding: 0.5rem;
+	}
+}
+
+/* Animation for selection */
+.participant-row.selected {
+	animation: selectHighlight 0.3s ease-out;
+}
+
+@keyframes selectHighlight {
+	0% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(var(--accent-color-rgb), 0.7);
+	}
+	70% {
+		transform: scale(1.02);
+		box-shadow: 0 0 0 10px rgba(var(--accent-color-rgb), 0);
+	}
+	100% {
+		transform: scale(1);
+		box-shadow: 0 0 0 0 rgba(var(--accent-color-rgb), 0);
+	}
+}

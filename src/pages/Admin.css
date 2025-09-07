@@ -1,0 +1,452 @@
+/* Admin Component Styles */
+
+.admin-page {
+	padding: 1rem;
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.page-header {
+	margin-bottom: 2rem;
+}
+
+.back-link {
+	color: var(--primary-color);
+	text-decoration: none;
+	font-size: 0.9rem;
+	margin-bottom: 0.5rem;
+	display: inline-block;
+}
+
+.back-link:hover {
+	text-decoration: underline;
+}
+
+.page-header h1 {
+	margin: 0.5rem 0;
+	color: var(--text-primary);
+}
+
+/* Admin Content */
+.admin-content {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+}
+
+.admin-section {
+	background: var(--background-secondary);
+	border-radius: 8px;
+	padding: 1.5rem;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-section h2 {
+	margin-top: 0;
+	margin-bottom: 1.5rem;
+	color: var(--text-primary);
+	border-bottom: 2px solid var(--border-color);
+	padding-bottom: 0.5rem;
+}
+
+/* Create Organization Button */
+.create-org-btn {
+	background: var(--accent-color);
+	color: white;
+	border: none;
+	padding: 1rem 2rem;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 1rem;
+	font-weight: 500;
+	transition: all 0.2s;
+	display: block;
+	margin: 0 auto;
+}
+
+.create-org-btn:hover {
+	background: var(--accent-hover);
+	transform: translateY(-1px);
+}
+
+/* Notification Form */
+.notification-form {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.form-group label {
+	font-weight: 500;
+	color: var(--text-primary);
+}
+
+.form-group input,
+.form-group textarea {
+	padding: 0.75rem;
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	font-size: 1rem;
+	transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+	outline: none;
+	border-color: var(--primary-color);
+	box-shadow: 0 0 0 2px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.form-group textarea {
+	resize: vertical;
+	min-height: 100px;
+}
+
+.form-group h3 {
+	margin: 0.5rem 0;
+	color: var(--text-primary);
+	font-size: 1.1rem;
+}
+
+/* Subscribers Controls */
+.subscribers-controls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 1rem;
+	padding: 0.75rem;
+	background: var(--background-primary);
+	border-radius: 4px;
+	border: 1px solid var(--border-color);
+}
+
+.select-all-btn {
+	background: var(--primary-color);
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.9rem;
+	transition: background-color 0.2s;
+}
+
+.select-all-btn:hover {
+	background: var(--primary-hover);
+}
+
+.selected-count {
+	font-size: 0.9rem;
+	color: var(--text-secondary);
+	font-weight: 500;
+}
+
+/* Subscribers List */
+.subscribers-list {
+	max-height: 200px;
+	overflow-y: auto;
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	padding: 0.5rem;
+	background: white;
+}
+
+.subscriber-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.5rem;
+	border-radius: 4px;
+	transition: background-color 0.2s;
+}
+
+.subscriber-item:hover {
+	background: var(--background-hover);
+}
+
+.subscriber-item input[type="checkbox"] {
+	transform: scale(1.1);
+	cursor: pointer;
+}
+
+.subscriber-item label {
+	cursor: pointer;
+	flex: 1;
+	font-size: 0.9rem;
+	color: var(--text-primary);
+}
+
+/* Send Notification Button */
+.send-notification-btn {
+	background: var(--success-color);
+	color: white;
+	border: none;
+	padding: 1rem 2rem;
+	border-radius: 6px;
+	cursor: pointer;
+	font-size: 1rem;
+	font-weight: 500;
+	transition: all 0.2s;
+	align-self: center;
+}
+
+.send-notification-btn:hover {
+	background: var(--success-hover);
+	transform: translateY(-1px);
+}
+
+/* User Management */
+.no-data {
+	text-align: center;
+	padding: 2rem;
+	color: var(--text-secondary);
+}
+
+.no-data p {
+	margin: 0;
+	font-size: 1.1rem;
+}
+
+.users-table-container {
+	overflow-x: auto;
+	border-radius: 8px;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.users-table {
+	width: 100%;
+	border-collapse: collapse;
+	background: white;
+}
+
+.users-table th,
+.users-table td {
+	padding: 1rem;
+	text-align: left;
+	border-bottom: 1px solid var(--border-color);
+}
+
+.users-table th {
+	background: var(--primary-color);
+	color: white;
+	font-weight: 500;
+	font-size: 0.9rem;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.users-table tbody tr:hover {
+	background: var(--background-hover);
+}
+
+.users-table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+/* User Info */
+.user-info {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+}
+
+.user-name {
+	font-weight: 500;
+	color: var(--text-primary);
+}
+
+.user-email {
+	font-size: 0.85rem;
+	color: var(--text-secondary);
+}
+
+/* Role Select */
+.role-select {
+	padding: 0.5rem;
+	border: 1px solid var(--border-color);
+	border-radius: 4px;
+	background: white;
+	font-size: 0.9rem;
+	cursor: pointer;
+	transition: border-color 0.2s;
+}
+
+.role-select:focus {
+	outline: none;
+	border-color: var(--primary-color);
+}
+
+/* Verification Status */
+.verification-status {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.25rem 0.5rem;
+	border-radius: 15px;
+	font-size: 0.8rem;
+	font-weight: 500;
+}
+
+.verification-status.verified {
+	background: var(--success-background);
+	color: var(--success-color);
+}
+
+.verification-status.unverified {
+	background: var(--error-background);
+	color: var(--error-color);
+}
+
+/* Approve Button */
+.approve-btn {
+	background: var(--success-color);
+	color: white;
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.85rem;
+	font-weight: 500;
+	transition: all 0.2s;
+}
+
+.approve-btn:hover {
+	background: var(--success-hover);
+	transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.admin-page {
+		padding: 0.5rem;
+	}
+	
+	.admin-section {
+		padding: 1rem;
+	}
+	
+	.admin-section h2 {
+		margin-bottom: 1rem;
+	}
+	
+	.subscribers-controls {
+		flex-direction: column;
+		gap: 0.5rem;
+		align-items: stretch;
+	}
+	
+	.selected-count {
+		text-align: center;
+	}
+	
+	.users-table-container {
+		font-size: 0.9rem;
+	}
+	
+	.users-table th,
+	.users-table td {
+		padding: 0.75rem 0.5rem;
+	}
+	
+	.user-info {
+		min-width: 150px;
+	}
+	
+	.send-notification-btn,
+	.create-org-btn {
+		width: 100%;
+	}
+}
+
+@media (max-width: 480px) {
+	.admin-content {
+		gap: 1.5rem;
+	}
+	
+	.form-group {
+		gap: 0.4rem;
+	}
+	
+	.users-table {
+		font-size: 0.8rem;
+	}
+	
+	.users-table th,
+	.users-table td {
+		padding: 0.5rem 0.3rem;
+	}
+	
+	.subscribers-list {
+		max-height: 150px;
+	}
+	
+	.subscriber-item {
+		padding: 0.4rem;
+	}
+	
+	.subscriber-item label {
+		font-size: 0.85rem;
+	}
+}
+
+/* Loading states */
+.notification-form.loading {
+	opacity: 0.7;
+	pointer-events: none;
+}
+
+.users-table.loading {
+	opacity: 0.7;
+}
+
+/* Animation for success actions */
+.approve-btn.success {
+	animation: successPulse 0.6s ease-out;
+}
+
+@keyframes successPulse {
+	0% {
+		transform: scale(1);
+		background: var(--success-color);
+	}
+	50% {
+		transform: scale(1.1);
+		background: var(--success-hover);
+	}
+	100% {
+		transform: scale(1);
+		background: var(--success-color);
+	}
+}
+
+/* Focus styles for accessibility */
+.users-table tbody tr:focus-within {
+	background: var(--selection-background);
+	outline: 2px solid var(--primary-color);
+	outline-offset: -2px;
+}
+
+/* Scrollbar styling for subscribers list */
+.subscribers-list::-webkit-scrollbar {
+	width: 6px;
+}
+
+.subscribers-list::-webkit-scrollbar-track {
+	background: var(--background-secondary);
+	border-radius: 3px;
+}
+
+.subscribers-list::-webkit-scrollbar-thumb {
+	background: var(--border-color);
+	border-radius: 3px;
+}
+
+.subscribers-list::-webkit-scrollbar-thumb:hover {
+	background: var(--text-secondary);
+}
