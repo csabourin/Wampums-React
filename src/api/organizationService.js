@@ -1,10 +1,11 @@
 // src/api/organizationService.js
-import apiService from './apiService';
-import indexedDBService from '../lib/indexedDBService';
+import apiService from "./apiService";
+import indexedDBService from "../lib/indexedDBService";
 
-const ORGANIZATION_ID_KEY = 'currentOrganizationId';
-const SETTINGS_CACHE_KEY = 'organization_settings';
-const API_BASE_URL = 'https://wampums-api.replit.app';
+const ORGANIZATION_ID_KEY = "currentOrganizationId";
+const SETTINGS_CACHE_KEY = "organization_settings";
+const API_BASE_URL =
+	import.meta.env.REACT_APP_API_URL || "https://wampums-api.replit.app";
 
 export const organizationService = {
 	fetchOrganizationId,
@@ -30,9 +31,13 @@ async function fetchOrganizationId() {
 		console.log("Fetching organization ID from the server...");
 
 		// Get the current hostname
-		const hostname = window.location.hostname;
+		// const hostname = window.location.hostname;
+		const hostname = "https://meute6a.app";
+		// Removed hardcoded organizationId and malformed hostname
 
-		const response = await fetch(`${API_BASE_URL}/get_organization_id?hostname=${encodeURIComponent(hostname)}`);
+		const response = await fetch(
+			`${API_BASE_URL}/get_organization_id?hostname=${encodeURIComponent(hostname)}`
+		);
 
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
@@ -45,7 +50,7 @@ async function fetchOrganizationId() {
 
 		if (data.success && organizationId) {
 			// Store the organization ID in localStorage for future use
-			localStorage.setItem(ORGANIZATION_ID_KEY, organizationId);
+			localStorage.setItem(ORGANIZATION_ID_KEY, organizationId.toString());
 			console.log("Organization ID fetched and stored:", organizationId);
 			return parseInt(organizationId, 10);
 		} else {
@@ -73,11 +78,15 @@ async function getOrganizationSettings() {
 
 	// Fetch from API if no valid cached data is found
 	try {
-		const response = await fetch(`${API_BASE_URL}/get_organization_settings`, {
-			headers: {
-				'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
-			}
-		});
+		const organizationId = await fetchOrganizationId(); // Added await
+		const response = await fetch(
+			`${API_BASE_URL}/public/organization-settings`,
+			{
+				headers: {
+					"X-Organization-ID": organizationId.toString(), // Convert to string
+				},
+			},
+		);
 
 		if (!response.ok) {
 			throw new Error(`HTTP error! status: ${response.status}`);
@@ -103,7 +112,8 @@ async function getOrganizationSettings() {
  * Get organization form formats
  */
 async function getOrganizationFormFormats(organizationId = null) {
-	const cacheKey = `form_formats_${organizationId || getCurrentOrganizationId()}`;
+	const currentOrgId = organizationId || getCurrentOrganizationId();
+	const cacheKey = `form_formats_${currentOrgId}`;
 	const expirationTime = 24 * 60 * 60 * 1000; // Cache for 24 hours
 
 	// Try to get cached data
@@ -121,9 +131,10 @@ async function getOrganizationFormFormats(organizationId = null) {
 
 		const response = await fetch(url, {
 			headers: {
-				'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
-				'Content-Type': 'application/json'
-			}
+				Authorization: `Bearer ${localStorage.getItem("jwtToken")}`,
+				"Content-Type": "application/json",
+				"X-Organization-ID": (organizationId || getCurrentOrganizationId()).toString(),
+			},
 		});
 
 		if (!response.ok) {
@@ -134,13 +145,19 @@ async function getOrganizationFormFormats(organizationId = null) {
 
 		if (data.success) {
 			// Cache the form formats
-			await indexedDBService.setCachedData(cacheKey, data.formFormats, expirationTime);
+			await indexedDBService.setCachedData(
+				cacheKey,
+				data.formFormats,
+				expirationTime,
+			);
 			return data.formFormats;
 		} else {
-			throw new Error(data.message || 'Failed to fetch organization form formats');
+			throw new Error(
+				data.message || "Failed to fetch organization form formats",
+			);
 		}
 	} catch (error) {
-		console.error('Error fetching organization form formats:', error);
+		console.error("Error fetching organization form formats:", error);
 		throw error;
 	}
 }
@@ -149,14 +166,15 @@ async function getOrganizationFormFormats(organizationId = null) {
  * Set the current organization ID
  */
 function setCurrentOrganizationId(organizationId) {
-	localStorage.setItem(ORGANIZATION_ID_KEY, organizationId);
+	localStorage.setItem(ORGANIZATION_ID_KEY, organizationId.toString());
 }
 
 /**
  * Get the current organization ID
  */
 function getCurrentOrganizationId() {
-	return localStorage.getItem(ORGANIZATION_ID_KEY);
+	const id = localStorage.getItem(ORGANIZATION_ID_KEY);
+	return id ? parseInt(id, 10) : null; // Return null if no ID exists
 }
 
 export default organizationService;

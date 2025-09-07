@@ -3,7 +3,7 @@ import apiService from './apiService';
 import { authService } from './authService';
 import indexedDBService from '../lib/indexedDBService';
 
-const API_BASE_URL = 'https://wampums-api.replit.app';
+const API_BASE_URL = import.meta.env.REACT_APP_API_URL || 'https://wampums-api.replit.app';
 const REUNION_DATES_CACHE_KEY = 'reunion_dates';
 const REUNION_PREPARATION_CACHE_PREFIX = 'reunion_preparation_';
 

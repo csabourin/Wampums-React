@@ -22,9 +22,11 @@ export const authService = {
 	decodeJwt
 };
 
+export default authService;
+
 async function login(email, password) {
 	try {
-		const response = await axios.post(`${API_URL}/login`, {
+		const response = await axios.post(`${API_URL}/public/login`, {
 			email,
 			password
 		});
@@ -34,9 +36,9 @@ async function login(email, password) {
 		if (success && token) {
 			// Store auth data
 			localStorage.setItem(AUTH_TOKEN_KEY, token);
-			localStorage.setItem(USER_ROLE_KEY, user_role);
-			localStorage.setItem(USER_FULLNAME_KEY, user_full_name);
-			localStorage.setItem(USER_ID_KEY, user_id);
+			localStorage.setItem(USER_ROLE_KEY, user_role || '');
+			localStorage.setItem(USER_FULLNAME_KEY, user_full_name || '');
+			localStorage.setItem(USER_ID_KEY, user_id?.toString() || '');
 
 			return {
 				success: true,
@@ -59,8 +61,8 @@ async function login(email, password) {
 
 async function logout() {
 	try {
-		// Try to call server logout endpoint
-		await axios.post(`${API_URL}/api.php?action=logout`, {}, {
+		// Use consistent endpoint pattern - should match other endpoints
+		await axios.post(`${API_URL}/logout`, {}, {
 			headers: getAuthHeaders()
 		});
 	} catch (error) {
@@ -73,6 +75,7 @@ async function logout() {
 	localStorage.removeItem(USER_ROLE_KEY);
 	localStorage.removeItem(USER_FULLNAME_KEY);
 	localStorage.removeItem(USER_ID_KEY);
+	localStorage.removeItem(ORGANIZATION_ID_KEY); // Also clear organization ID on logout
 	localStorage.removeItem('guardianParticipants');
 
 	// Redirect to login page
@@ -82,7 +85,8 @@ async function logout() {
 
 async function register(registerData) {
 	try {
-		const response = await axios.post(`${API_URL}/api.php?action=register`, registerData);
+		// Use consistent endpoint pattern
+		const response = await axios.post(`${API_URL}/public/register`, registerData);
 		return response.data;
 	} catch (error) {
 		console.error('Registration error:', error);
@@ -95,7 +99,8 @@ async function register(registerData) {
 
 async function resetPassword(token, newPassword) {
 	try {
-		const response = await axios.post(`${API_URL}/api.php?action=reset_password`, {
+		// Use consistent endpoint pattern
+		const response = await axios.post(`${API_URL}/public/reset-password`, {
 			token,
 			new_password: newPassword
 		});
@@ -111,7 +116,8 @@ async function resetPassword(token, newPassword) {
 
 async function requestPasswordReset(email) {
 	try {
-		const response = await axios.post(`${API_URL}/api.php?action=request_reset`, {
+		// Use consistent endpoint pattern
+		const response = await axios.post(`${API_URL}/public/request-password-reset`, {
 			email
 		});
 		return response.data;
@@ -137,11 +143,28 @@ function getCurrentUser() {
 	return {
 		role: userRole,
 		fullName: userFullName,
-		id: userId
+		id: parseInt(userId, 10) || userId // Convert to number if possible
 	};
 }
 
 function isAuthenticated() {
+	const token = getToken();
+
+	if (!token) {
+		return false;
+	}
+
+	// Check if token is expired
+	const decoded = decodeJwt(token);
+	if (decoded && decoded.exp) {
+		const currentTime = Math.floor(Date.now() / 1000);
+		if (decoded.exp < currentTime) {
+			// Token is expired, clear it
+			logout();
+			return false;
+		}
+	}
+
 	const user = getCurrentUser();
 	return Boolean(user);
 }
@@ -157,7 +180,7 @@ function getAuthHeaders() {
 	}
 
 	if (organizationId) {
-		headers['X-Organization-ID'] = organizationId;
+		headers['x-organization-id'] = organizationId;
 	}
 
 	return headers;
@@ -168,7 +191,8 @@ function getToken() {
 }
 
 function getOrganizationId() {
-	return localStorage.getItem(ORGANIZATION_ID_KEY);
+	const id = localStorage.getItem(ORGANIZATION_ID_KEY);
+	return id ? parseInt(id, 10) : null; // Return null if no ID exists, parse as int
 }
 
 function decodeJwt(token) {
@@ -182,8 +206,13 @@ function decodeJwt(token) {
 		// Decode the payload (middle part)
 		const base64Url = parts[1];
 		const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+
+		// Add padding if needed
+		const padding = base64.length % 4;
+		const paddedBase64 = padding ? base64 + '='.repeat(4 - padding) : base64;
+
 		const jsonPayload = decodeURIComponent(
-			atob(base64)
+			atob(paddedBase64)
 				.split('')
 				.map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
 				.join('')

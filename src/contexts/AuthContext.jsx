@@ -1,6 +1,6 @@
 // src/contexts/AuthContext.js
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import { authService } from '../api/authService';
+import authService from '../api/authService';
 
 // Create the context
 const AuthContext = createContext();
@@ -22,12 +22,13 @@ export function AuthProvider({ children }) {
 		setLoading(false);
 	}, []);
 
-	// Login function
-	const login = async (email, password) => {
+	// Login function - now accepts organizationId parameter
+	const login = async (email, password, organizationId = null) => {
 		setLoading(true);
 		setError(null);
+
 		try {
-			const result = await authService.login(email, password);
+			const result = await authService.login(email, password, organizationId);
 			if (result.success) {
 				setCurrentUser(result.user);
 				return { success: true };
@@ -36,8 +37,9 @@ export function AuthProvider({ children }) {
 				return { success: false, message: result.message };
 			}
 		} catch (error) {
-			setError(error.message);
-			return { success: false, message: error.message };
+			const errorMessage = error.message || 'Login failed';
+			setError(errorMessage);
+			return { success: false, message: errorMessage };
 		} finally {
 			setLoading(false);
 		}
@@ -46,11 +48,16 @@ export function AuthProvider({ children }) {
 	// Logout function
 	const logout = async () => {
 		setLoading(true);
+		setError(null); // Clear any previous errors
+
 		try {
 			await authService.logout();
 			setCurrentUser(null);
 		} catch (error) {
+			console.error('Logout error:', error);
 			setError(error.message);
+			// Even if logout fails on server, clear local state
+			setCurrentUser(null);
 		} finally {
 			setLoading(false);
 		}
@@ -60,12 +67,14 @@ export function AuthProvider({ children }) {
 	const register = async (userData) => {
 		setLoading(true);
 		setError(null);
+
 		try {
 			const result = await authService.register(userData);
 			return result;
 		} catch (error) {
-			setError(error.message);
-			return { success: false, message: error.message };
+			const errorMessage = error.message || 'Registration failed';
+			setError(errorMessage);
+			return { success: false, message: errorMessage };
 		} finally {
 			setLoading(false);
 		}
@@ -75,12 +84,14 @@ export function AuthProvider({ children }) {
 	const resetPassword = async (token, newPassword) => {
 		setLoading(true);
 		setError(null);
+
 		try {
 			const result = await authService.resetPassword(token, newPassword);
 			return result;
 		} catch (error) {
-			setError(error.message);
-			return { success: false, message: error.message };
+			const errorMessage = error.message || 'Password reset failed';
+			setError(errorMessage);
+			return { success: false, message: errorMessage };
 		} finally {
 			setLoading(false);
 		}
@@ -90,15 +101,22 @@ export function AuthProvider({ children }) {
 	const requestPasswordReset = async (email) => {
 		setLoading(true);
 		setError(null);
+
 		try {
 			const result = await authService.requestPasswordReset(email);
 			return result;
 		} catch (error) {
-			setError(error.message);
-			return { success: false, message: error.message };
+			const errorMessage = error.message || 'Password reset request failed';
+			setError(errorMessage);
+			return { success: false, message: errorMessage };
 		} finally {
 			setLoading(false);
 		}
+	};
+
+	// Clear error function - useful for dismissing error notifications
+	const clearError = () => {
+		setError(null);
 	};
 
 	// The auth context value
@@ -111,7 +129,8 @@ export function AuthProvider({ children }) {
 		logout,
 		register,
 		resetPassword,
-		requestPasswordReset
+		requestPasswordReset,
+		clearError
 	};
 
 	return (
